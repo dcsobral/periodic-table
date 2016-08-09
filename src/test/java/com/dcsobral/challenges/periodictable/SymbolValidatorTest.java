@@ -170,6 +170,20 @@ public class SymbolValidatorTest {
     assertEquals("Ie", new SymbolValidator("Slimyrine").firstValidSymbolInAlphabeticalOrder());
   }
 
+  @Test
+  public void findNumberOfValidSymbolsForAnElement() throws Exception {
+    assertEquals(11, new SymbolValidator("Zuulon").numberOfValidSymbols());
+    // Zu Zl Zo Zn
+    // Uu Ul Uo Un
+    // Lo Ln
+    // On
+    assertEquals(3, new SymbolValidator("Abc").numberOfValidSymbols());
+    assertEquals(4, new SymbolValidator("Aabc").numberOfValidSymbols());
+    assertEquals(5, new SymbolValidator("Aabbc").numberOfValidSymbols());
+    assertEquals(6, new SymbolValidator("Aabbcc").numberOfValidSymbols());
+    assertEquals(7, new SymbolValidator("Ababcc").numberOfValidSymbols());
+  }
+
   private int getRandomFirstLetterPosition(CharSequence element) {
     return secureRandom.nextInt(element.length() - 2);
   }

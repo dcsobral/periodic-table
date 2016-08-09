@@ -1,5 +1,10 @@
 package com.dcsobral.challenges.periodictable;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 /**
  * Validates symbols for a given element.
  *
@@ -7,6 +12,7 @@ package com.dcsobral.challenges.periodictable;
  * @since 8 /9/16
  */
 public class SymbolValidator {
+  private static final Pattern EMPTY_STRING = Pattern.compile("");
   private final String element;
 
 
@@ -56,33 +62,62 @@ public class SymbolValidator {
       && isLetterFromName(elementNameAfterChar(firstLetter), secondLetter);
   }
 
-  private boolean isLetterFromElement(char letter) {
-    return isLetterFromName(element, letter);
-  }
-
-  private String elementNameAfterChar(char letter) {
-    return element.substring(element.indexOf(Character.toLowerCase(letter)) + 1);
-  }
-
+  /**
+   * Find the first valid symbol for this validator's element in alphabetical order.
+   *
+   * <p>That is, find the valid symbol X which, for any other valid symbol Y, X comes
+   * first in the alphabetical order than Y.</p>
+   */
   public String firstValidSymbolInAlphabeticalOrder() {
     int firstCharAt = 0;
-    char firstChar = Character.toLowerCase(element.charAt(firstCharAt));
+    char firstChar = element.charAt(firstCharAt);
     for (int i = firstCharAt + 1; i < element.length() - 1; i++) {
-      char lowerCaseLetter = Character.toLowerCase(element.charAt(i));
-      if (lowerCaseLetter < firstChar) {
-        firstChar = lowerCaseLetter;
+      char letter = element.charAt(i);
+      if (letter < firstChar) {
+        firstChar = letter;
         firstCharAt = i;
       }
     }
 
     char secondChar = element.charAt(firstCharAt + 1);
     for (int i = firstCharAt + 2; i < element.length(); i++) {
-      char lowerCaseLetter = Character.toLowerCase(element.charAt(i));
-      if (lowerCaseLetter < secondChar) {
-        secondChar = lowerCaseLetter;
+      char letter = element.charAt(i);
+      if (letter < secondChar) {
+        secondChar = letter;
       }
     }
 
     return String.format("%s%s", Character.toUpperCase(firstChar), secondChar);
+  }
+
+  /**
+   * Find the number of distinct valid symbols for this validator's element.
+   */
+  public int numberOfValidSymbols() {
+    Set<String> distinct = getDistinctSet(element);
+
+    int result = 0;
+    for (String s : distinct) {
+      char c = s.charAt(0);
+      String remainder = elementNameAfterChar(c);
+      Set<String> secondLetters = getDistinctSet(remainder);
+      result += secondLetters.size();
+    }
+
+    return result;
+  }
+
+  private Set<String> getDistinctSet(String remainder) {
+    if (remainder.isEmpty()) return new HashSet<>();
+
+    return new HashSet<String>(Arrays.asList(EMPTY_STRING.split(remainder)));
+  }
+
+  private boolean isLetterFromElement(char letter) {
+    return isLetterFromName(element, letter);
+  }
+
+  private String elementNameAfterChar(char letter) {
+    return element.substring(element.indexOf(Character.toLowerCase(letter)) + 1);
   }
 }
