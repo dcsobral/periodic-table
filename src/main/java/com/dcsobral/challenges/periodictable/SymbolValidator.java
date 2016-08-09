@@ -16,10 +16,12 @@ public class SymbolValidator {
   }
 
   public boolean validate(CharSequence symbol) {
-    return hasValidSize(symbol) && isLetterFromElement(symbol, 0) && isLetterFromElement(symbol, 1);
+    return hasValidSize(symbol)
+      && isLetterFromElement(symbol.charAt(0))
+      && isLetterFromElement(symbol.charAt(1));
   }
 
-  private boolean isLetterFromElement(CharSequence symbol, int index) {
-    return element.indexOf(Character.toLowerCase(symbol.charAt(index))) >= 0;
+  private boolean isLetterFromElement(char letter) {
+    return element.indexOf(Character.toLowerCase(letter)) >= 0;
   }
 }
