@@ -135,6 +135,16 @@ public class SymbolValidatorTest {
     assertFalse("'Oo' is not a valid symbol for Xenon", xenon.validate("Oo"));
   }
 
+  @Test
+  public void testExamples() throws Exception {
+    assertTrue(new SymbolValidator("Spenglerium").validate("Ee"));
+    assertTrue(new SymbolValidator("Zeddemorium").validate("Zr"));
+    assertTrue(new SymbolValidator("Venkmine").validate("Kn"));
+    assertFalse(new SymbolValidator("Stantzon").validate("Zt"));
+    assertFalse(new SymbolValidator("Melintzum").validate("Nn"));
+    assertFalse(new SymbolValidator("Tullium").validate("Ty"));
+  }
+
   private int getRandomFirstLetterPosition(CharSequence element) {
     return secureRandom.nextInt(element.length() - 2);
   }
