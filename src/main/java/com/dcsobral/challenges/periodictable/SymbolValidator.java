@@ -15,13 +15,28 @@ public class SymbolValidator {
     return symbol.length() == 2;
   }
 
+  private static boolean isLetterFromName(String element, char letter) {
+    return element.indexOf(Character.toLowerCase(letter)) >= 0;
+  }
+
   public boolean validate(CharSequence symbol) {
-    return hasValidSize(symbol)
-      && isLetterFromElement(symbol.charAt(0))
-      && isLetterFromElement(symbol.charAt(1));
+
+    if (!hasValidSize(symbol)) {
+      return false;
+    }
+
+    char firstLetter = symbol.charAt(0);
+    char secondLetter = symbol.charAt(1);
+
+    return isLetterFromElement(firstLetter)
+      && isLetterFromName(elementNameAfterChar(firstLetter), secondLetter);
   }
 
   private boolean isLetterFromElement(char letter) {
-    return element.indexOf(Character.toLowerCase(letter)) >= 0;
+    return isLetterFromName(element, letter);
+  }
+
+  private String elementNameAfterChar(char letter) {
+    return element.substring(element.indexOf(Character.toLowerCase(letter)) + 1);
   }
 }
