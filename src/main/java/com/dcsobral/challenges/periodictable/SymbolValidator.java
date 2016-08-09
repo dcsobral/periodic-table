@@ -63,4 +63,26 @@ public class SymbolValidator {
   private String elementNameAfterChar(char letter) {
     return element.substring(element.indexOf(Character.toLowerCase(letter)) + 1);
   }
+
+  public String firstValidSymbolInAlphabeticalOrder() {
+    int firstCharAt = 0;
+    char firstChar = Character.toLowerCase(element.charAt(firstCharAt));
+    for (int i = firstCharAt + 1; i < element.length() - 1; i++) {
+      char lowerCaseLetter = Character.toLowerCase(element.charAt(i));
+      if (lowerCaseLetter < firstChar) {
+        firstChar = lowerCaseLetter;
+        firstCharAt = i;
+      }
+    }
+
+    char secondChar = element.charAt(firstCharAt + 1);
+    for (int i = firstCharAt + 2; i < element.length(); i++) {
+      char lowerCaseLetter = Character.toLowerCase(element.charAt(i));
+      if (lowerCaseLetter < secondChar) {
+        secondChar = lowerCaseLetter;
+      }
+    }
+
+    return String.format("%s%s", Character.toUpperCase(firstChar), secondChar);
+  }
 }

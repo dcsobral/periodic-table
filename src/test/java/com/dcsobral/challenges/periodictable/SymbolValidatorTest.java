@@ -1,6 +1,10 @@
 package com.dcsobral.challenges.periodictable;
 
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.security.SecureRandom;
@@ -143,6 +147,27 @@ public class SymbolValidatorTest {
     assertFalse(new SymbolValidator("Stantzon").validate("Zt"));
     assertFalse(new SymbolValidator("Melintzum").validate("Nn"));
     assertFalse(new SymbolValidator("Tullium").validate("Ty"));
+  }
+
+  @Test
+  public void testFirstCharacterOfFirstValidSymbolInAlphabeticalOrder() throws Exception {
+    assertThat(new SymbolValidator("Edcba").firstValidSymbolInAlphabeticalOrder(), startsWith("B"));
+    assertThat(new SymbolValidator("Abcde").firstValidSymbolInAlphabeticalOrder(), startsWith("A"));
+    assertThat(new SymbolValidator("Edcbabcde").firstValidSymbolInAlphabeticalOrder(), startsWith("A"));
+  }
+
+  @Test
+  public void testSecondCharacterOfFirstValidSymbolInAlphabeticalOrder() throws Exception {
+    assertThat(new SymbolValidator("Edcba").firstValidSymbolInAlphabeticalOrder(), endsWith("a"));
+    assertThat(new SymbolValidator("Abcde").firstValidSymbolInAlphabeticalOrder(), endsWith("b"));
+    assertThat(new SymbolValidator("Edcbabcde").firstValidSymbolInAlphabeticalOrder(), endsWith("b"));
+    assertThat(new SymbolValidator("Edcbaedcde").firstValidSymbolInAlphabeticalOrder(), endsWith("c"));
+  }
+
+  @Test
+  public void computeFirstValidSymbolInAlphabeticalOrder() throws Exception {
+    assertEquals("Ei", new SymbolValidator("Gozerium").firstValidSymbolInAlphabeticalOrder());
+    assertEquals("Ie", new SymbolValidator("Slimyrine").firstValidSymbolInAlphabeticalOrder());
   }
 
   private int getRandomFirstLetterPosition(CharSequence element) {
