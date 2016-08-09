@@ -85,6 +85,44 @@ public class SymbolValidatorTest {
     assertFalse("'Hg' is not a valid symbol for Mercury", new SymbolValidator("Mercury").validate("Hg"));
   }
 
+  @Test
+  public void lettersMustAppearInOrderOnElementName_validSymbols() throws Exception {
+    String element = getRandomElement(ELEMENT_MAX_SIZE);
+    int firstLetterPosition = secureRandom.nextInt(element.length() - 1);
+    int secondLetterPosition = secureRandom.nextInt(element.length() - firstLetterPosition) + firstLetterPosition;
+    String symbol = getSymbolFromLetterPosition(element, firstLetterPosition, secondLetterPosition);
+
+    assertTrue("Symbols (" + symbol + ") with letters of element (" + element + ") in order are valid ",
+      new SymbolValidator(element).validate(symbol));
+
+    assertTrue("'Vr' is a valid symbol for Silver", new SymbolValidator("Silver").validate("Vr"));
+    SymbolValidator magnesium = new SymbolValidator("Magnesium");
+    assertTrue("'Ma' is a valid symbol for Magnesium", magnesium.validate("Ma"));
+    assertTrue("'Am' is a valid symbol for Magnesium", magnesium.validate("Am"));
+  }
+
+  @Test
+  public void lettersMustAppearInOrderOnElementName_invalidSymbols() throws Exception {
+
+    String element;
+    char firstLetter;
+    char secondLetter;
+
+    do {
+      element = getRandomElement(ELEMENT_MAX_SIZE);
+      int firstLetterPosition = secureRandom.nextInt(element.length() - 1);
+      firstLetter = element.charAt(firstLetterPosition);
+      secondLetter = element.charAt(secureRandom.nextInt(element.length() - firstLetterPosition) + firstLetterPosition);
+    } while (element.indexOf(firstLetter, element.indexOf(secondLetter) + 1) >= 0);
+
+    String symbol = getSymbolWithLetters(secondLetter, firstLetter);
+
+    assertFalse("Symbols (" + symbol + ") with two letters of element (" + element + ") out of order are invalid ",
+      new SymbolValidator(element).validate(symbol));
+
+    assertFalse("'Rv' is a not valid symbol for Silver", new SymbolValidator("Silver").validate("Rv"));
+  }
+
   private char getLetterNotIn(String element) {
     char letter;
     do {
